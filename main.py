@@ -11,6 +11,7 @@ import json
 app = FlaskAPI(__name__)
 app.config["webmd_vitamin_index"] = json.load(open("scrape_webmd/webmd_vitamin_index.json", 'r'))
 
+#TODO: Write tests
 
 @app.route("/", methods=['GET', 'POST'])
 def notes_list():
