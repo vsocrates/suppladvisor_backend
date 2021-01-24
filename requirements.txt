@@ -1,6 +1,7 @@
 attrs==20.3.0
 Automat==20.2.0
 beautifulsoup4==4.9.3
+billiard==3.6.3.0
 certifi==2020.12.5
 cffi==1.14.4
 chardet==4.0.0
@@ -31,6 +32,7 @@ pyOpenSSL==20.0.1
 queuelib==1.5.0
 requests==2.25.1
 Scrapy==2.4.1
+scrapyscript==1.1.0
 service-identity==18.1.0
 six==1.15.0
 soupsieve==2.1

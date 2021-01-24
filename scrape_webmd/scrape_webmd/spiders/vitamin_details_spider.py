@@ -29,12 +29,14 @@ class VitaminDetailsSpider(scrapy.Spider):
         side_effects = self.clean_html(response.css('div#tab-3 div.tab-text div.inner-content').get())
         interactions = self.clean_html(response.css('div#tab-4 div.tab-text div.inner-content').get())
         dosing = self.clean_html(response.css('div#tab-5 div.tab-text div.inner-content').get())
+        references = response.css("div.references-content ul li::text").getall()
 
         vitamin_details = dict()
         vitamin_details[vitamin]= {
             "side_effects": side_effects,
             "interactions": interactions,
-            "dosing": dosing
+            "dosing": dosing,
+            "references": references
         }
 
         # return dictionary
@@ -45,7 +47,7 @@ class VitaminDetailsSpider(scrapy.Spider):
         removes tags, strips text, rstrips text,
         replace or strip certain special characters
         """
-        
+
         # TODO: add in more sophisticated cleaning.
         cleaned_html = remove_tags(html_str).strip().rstrip()
         cleaned_html = cleaned_html.replace('?\r\n', '')
