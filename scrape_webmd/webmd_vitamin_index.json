@@ -1287,5 +1287,9 @@
     "yucca": "https://www.webmd.com/vitamins/ai/ingredientmono-734/yucca",
     "zedoary": "https://www.webmd.com/vitamins/ai/ingredientmono-337/zedoary",
     "zinc": "https://www.webmd.com/vitamins/ai/ingredientmono-982/zinc",
-    "zizyphus": "https://www.webmd.com/vitamins/ai/ingredientmono-62/zizyphus"
+    "zizyphus": "https://www.webmd.com/vitamins/ai/ingredientmono-62/zizyphus",
+    
+    "vitamin-d3":"https://www.webmd.com/vitamins/ai/ingredientmono-929/vitamin-d",
+    "kelp":"https://www.webmd.com/vitamins/ai/ingredientmono-542/laminaria",
+    
 }
