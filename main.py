@@ -28,6 +28,80 @@ def notes_list():
     return [note_repr(idx) for idx in sorted(notes.keys())]
 
 
+
+
+def matches(text):
+    """
+    Helper function to calculate number of words from a list that match words in a sentence.
+    """    
+    return sum(word in text.lower() for word in keywords)
+
+
+def get_dsldID(name, brand):
+    """
+    Gets DSLD ID from the DSLD database using info from amazon product page
+    
+    Input: 
+        name of the product (e.g., "Professional Botanicals Cal/Mg + Boron - Vegan Formulated to Support Bone Health and Healthy Skin, Teeth and Nails Calcium Magnesium and Boron 90 Vegetarian Capsules")
+        brand (e.g., "Professional Botanicals")
+    Reference: https://www.amazon.com/Professional-Botanicals-Cal-Boron-Formulated/dp/B00512IDV0
+    Output: DSLD ID string
+    """   
+    #Search DSLD for all supplements made by the provided brand
+    query = '"' + brand + '"'
+    response = requests.get("https://datadiscovery.nlm.nih.gov/resource/wp6t-qxsk.json?$where=brand_name LIKE"+query).json()
+
+    dsld_id = []
+    brand_name = []
+    product_name = []
+
+    for x in response:
+        dsld_id.append(x['dsld_id'])
+        brand_name.append(x['brand_name'])
+        product_name.append(x['product_name'])
+
+    dsld_lbl_df = pd.DataFrame() # create empty dataframe 
+    dsld_lbl_df['dsld_id'] = dsld_id 
+    dsld_lbl_df['brand_name'] = brand_name
+    dsld_lbl_df['product_name'] = product_name ###add new columns based off lists
+
+    tokens = nltk.word_tokenize(name)
+    texts = [str(i) for i in dsld_lbl_df.product_name.tolist()]
+
+    keywords = [i.lower() for i in tokens]
+
+    regex_name = max(texts, key=matches)
+
+    #here, if I have several matches, I just take the one on the top of the list
+    dsld_id = dsld_lbl_df[(dsld_lbl_df["product_name"] == regex_name)].head(n=1).dsld_id.values[0]
+
+    return dsld_id
+
+
+def get_ingredients(dsld_id):
+    """
+    Gets ingredients using DSLD ID
+    
+    Input: dsld_id string
+    Output: list of ingredients
+    """
+    query = '"' + '%' + dsld_id + '%' + '"'
+
+    response = requests.get("https://datadiscovery.nlm.nih.gov/resource/btg5-fr69.json?$where=sample_dsld_ids LIKE "+query).json()
+    response2 = requests.get("https://datadiscovery.nlm.nih.gov/resource/btg5-fr69.json?$where=sample_dsld_ids_in_nhanes LIKE "+query).json()
+    
+    ingredients = []
+
+    for product in response:
+        ingredients.append(product['ingredient_name'])
+    for product in response2:
+        ingredients.append(product['ingredient_name'])
+
+    return ingredients
+
+
+
+
 # This is more of a test endpoint for getting single vitamins/supplements.
 @app.route("/scrape_webmd/<vitamin>", methods=['GET'])
 def scrape_webmd(vitamin):
