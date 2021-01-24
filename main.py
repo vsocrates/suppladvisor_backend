@@ -4,6 +4,11 @@ from flask_api import FlaskAPI, status, exceptions
 from scrape_webmd.scrape_webmd.spiders.vitamin_details_spider import VitaminDetailsSpider
 import scrapyscript
 
+import pandas as pd
+# from sodapy import Socrata
+import nltk
+import re
+
 import requests
 import json
 
